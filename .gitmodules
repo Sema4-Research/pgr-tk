@@ -1,6 +1,6 @@
 [submodule "agc"]
 	path = agc
 	url = https://github.com/cschin/agc.git
-[submodule "rs-wfa/WFA"]
+[submodule "WFA"]
 	path = rs-wfa/WFA
 	url = https://github.com/cschin/WFA.git
