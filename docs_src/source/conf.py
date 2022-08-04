@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'pgr-tk'
-copyright = '2022, Jason Chin'
+copyright = '2022+, Sema4, OpCo, Inc'
 author = 'Jason Chin'
 
 

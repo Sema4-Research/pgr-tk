@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Welcome to pgr-tk’s documentation! &#8212; pgr-tk  documentation</title>
+    <title>Welcome to PGR-TK’s documentation! &#8212; pgr-tk  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/nature.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -30,7 +30,7 @@
           <a href="pgrtk.html" title="PGR-TK"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">pgr-tk  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Welcome to pgr-tk’s documentation!</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Welcome to PGR-TK’s documentation!</a></li> 
       </ul>
     </div>  
 
@@ -40,7 +40,56 @@
           <div class="body" role="main">
             
   <section id="welcome-to-pgr-tk-s-documentation">
-<h1>Welcome to pgr-tk’s documentation!<a class="headerlink" href="#welcome-to-pgr-tk-s-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>Welcome to PGR-TK’s documentation!<a class="headerlink" href="#welcome-to-pgr-tk-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>## Pangenome Research Toolkit</p>
+<p>The PGR-TK is a python library for pangenome analysis. It includes features to (1) index human pangneome assembly and use the index for query (2) construct Minimizer Anchored Pangenome (MAP) Graph (3) Perform principal bundle decomposition for each haplotype to understand the repeat structures in pangenome.</p>
+<p>PGR-TK implements the most computationally intensive algorithms with the Rust programming language and exposes an application interface in the Python programming language. This enables scripting and interactive analysis, e.g., with Jupyter Notebook.</p>
+<p>Here is a brief example using PGR-TK to generate a local MAP Graph of the MHC Class II locus:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pgrtk</span>
+
+<span class="n">ref_db</span> <span class="o">=</span><span class="n">pgrtk</span><span class="o">.</span><span class="n">AGCFile</span><span class="p">(</span><span class="s2">&quot;/data/pgr-tk-HGRP-y1-evaluation-set-v0.agc&quot;</span><span class="p">)</span> <span class="c1"># lazy load an agc file of the reference without any SHIMMER index</span>
+
+<span class="n">sdb</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">SeqIndexDB</span><span class="p">()</span>
+<span class="n">sdb</span><span class="o">.</span><span class="n">load_from_agc_index</span><span class="p">(</span><span class="s2">&quot;/data/pgr-tk-HGRP-y1-evaluation-set-v0&quot;</span><span class="p">)</span>
+
+<span class="n">ref_file_name</span><span class="p">,</span> <span class="n">roi_chr</span><span class="p">,</span> <span class="n">roi_b</span><span class="p">,</span> <span class="n">roi_e</span> <span class="o">=</span> <span class="s1">&#39;hg19_tagged.fa&#39;</span><span class="p">,</span> <span class="s2">&quot;chr6_hg19&quot;</span><span class="p">,</span> <span class="mi">32130918</span><span class="p">,</span> <span class="mi">32959917</span>
+<span class="n">padding</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1">#get a segment of a reference</span>
+<span class="n">roi_seq</span> <span class="o">=</span> <span class="n">ref_db</span><span class="o">.</span><span class="n">get_sub_seq</span><span class="p">(</span><span class="n">ref_file_name</span><span class="p">,</span> <span class="n">roi_chr</span><span class="p">,</span> <span class="n">roi_b</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span> <span class="n">roi_e</span><span class="o">+</span><span class="n">padding</span><span class="p">)</span>
+
+
+<span class="c1"># get thehits in the pangenome reference</span>
+<span class="n">aln_range</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">query_sdb</span><span class="p">(</span><span class="n">sdb</span><span class="p">,</span> <span class="n">roi_seq</span><span class="p">,</span> <span class="n">merge_range_tol</span><span class="o">=</span><span class="mi">200000</span><span class="p">)</span>
+
+<span class="c1"># collect the target sequences from the hits</span>
+<span class="n">seq_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">aln_range</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+<span class="n">ctg_name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">seq_info</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="n">seq_id</span> <span class="o">=</span> <span class="n">k</span>
+<span class="n">rgns</span> <span class="o">=</span> <span class="n">aln_range</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">rgns</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">merge_regions</span><span class="p">(</span><span class="n">rgns</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">rgn</span> <span class="ow">in</span> <span class="n">rgns</span><span class="p">:</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="n">aln</span> <span class="o">=</span> <span class="n">rgn</span>
+
+        <span class="n">seq</span> <span class="o">=</span>  <span class="n">sdb</span><span class="o">.</span><span class="n">get_sub_seq</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">ctg_name</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">seq</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">rc_byte_seq</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+
+        <span class="n">seq_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ctg_name</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">orientation</span><span class="p">),</span> <span class="n">seq</span><span class="p">))</span>
+
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># Create a shimmer indext database with smaller window (denser shimmers)</span>
+<span class="n">new_sdb</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">SeqIndexDB</span><span class="p">()</span>
+<span class="n">new_sdb</span><span class="o">.</span><span class="n">load_from_seq_list</span><span class="p">(</span><span class="n">seq_list</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">56</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">min_span</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="n">new_sdb</span><span class="o">.</span><span class="n">generate_mapg_gfa</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/results/HLA-ClassII.gfa&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -70,7 +119,7 @@
   <div>
     <h3><a href="#">Table of Contents</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Welcome to pgr-tk’s documentation!</a></li>
+<li><a class="reference internal" href="#">Welcome to PGR-TK’s documentation!</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
@@ -114,11 +163,11 @@
           <a href="pgrtk.html" title="PGR-TK"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">pgr-tk  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Welcome to pgr-tk’s documentation!</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Welcome to PGR-TK’s documentation!</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Jason Chin.
+        &#169; Copyright 2022+, Sema4, OpCo, Inc.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
