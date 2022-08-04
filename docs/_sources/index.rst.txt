@@ -37,22 +37,22 @@ Here is a brief example using PGR-TK to generate a local MAP Graph of the MHC Cl
 	seq_list = []
 	i = 0
 	for k in list(aln_range.keys()):
-	ctg_name, source, _ = seq_info[k]
-	seq_id = k
-	rgns = aln_range[k].copy()
+        ctg_name, source, _ = seq_info[k]
+        seq_id = k
+        rgns = aln_range[k].copy()
 
-	rgns = pgrtk.merge_regions(rgns,tol=1000)
+        rgns = pgrtk.merge_regions(rgns,tol=1000)
 
-	for rgn in rgns:
-		b, e, length, orientation, aln = rgn
+        for rgn in rgns:
+            b, e, length, orientation, aln = rgn
 
-		seq =  sdb.get_sub_seq(source, ctg_name, b, e)
-		if orientation == 1:
-			seq = pgrtk.rc_byte_seq(seq)
+            seq =  sdb.get_sub_seq(source, ctg_name, b, e)
+            if orientation == 1:
+                seq = pgrtk.rc_byte_seq(seq)
 
-		seq_list.append(("{}_{}_{}_{}".format(ctg_name, b, e, orientation), seq))
-		
-		i += 1
+            seq_list.append(("{}_{}_{}_{}".format(ctg_name, b, e, orientation), seq))
+            
+            i += 1
 
 	# Create a shimmer indext database with smaller window (denser shimmers)
 	new_sdb = pgrtk.SeqIndexDB() 

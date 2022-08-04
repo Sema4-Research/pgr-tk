@@ -73,15 +73,15 @@
 <span class="n">rgns</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">merge_regions</span><span class="p">(</span><span class="n">rgns</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">rgn</span> <span class="ow">in</span> <span class="n">rgns</span><span class="p">:</span>
-        <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="n">aln</span> <span class="o">=</span> <span class="n">rgn</span>
+    <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="n">aln</span> <span class="o">=</span> <span class="n">rgn</span>
 
-        <span class="n">seq</span> <span class="o">=</span>  <span class="n">sdb</span><span class="o">.</span><span class="n">get_sub_seq</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">ctg_name</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">seq</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">rc_byte_seq</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+    <span class="n">seq</span> <span class="o">=</span>  <span class="n">sdb</span><span class="o">.</span><span class="n">get_sub_seq</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">ctg_name</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">rc_byte_seq</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
 
-        <span class="n">seq_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ctg_name</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">orientation</span><span class="p">),</span> <span class="n">seq</span><span class="p">))</span>
+    <span class="n">seq_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ctg_name</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">orientation</span><span class="p">),</span> <span class="n">seq</span><span class="p">))</span>
 
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
 <span class="c1"># Create a shimmer indext database with smaller window (denser shimmers)</span>
 <span class="n">new_sdb</span> <span class="o">=</span> <span class="n">pgrtk</span><span class="o">.</span><span class="n">SeqIndexDB</span><span class="p">()</span>
