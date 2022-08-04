@@ -2,5 +2,5 @@
 	path = agc
 	url = https://github.com/cschin/agc.git
 [submodule "WFA"]
-	path = rs-wfa/WFA
+	path = WFA
 	url = https://github.com/cschin/WFA.git
